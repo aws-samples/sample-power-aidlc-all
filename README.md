@@ -22,14 +22,14 @@ No special prompt prefix needed — the agent asks you automatically.
 
 1. Open Kiro IDE
 2. Open the Powers panel → click "Add power from GitHub"
-3. Enter the repository URL: `https://github.com/awslabs/aidlc-kiro-power/tree/main/aidlc_power`
+3. Enter the repository URL: `https://github.com/aws-samples/sample-power-aidlc-all/tree/main/aidlc_power`
 4. Click Install
 
 ### From Local Path
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/awslabs/aidlc-kiro-power.git
+   git clone https://github.com/aws-samples/sample-power-aidlc-all.git
    ```
 2. Open Kiro IDE
 3. Open the Powers panel → click "Add power from Local Path"
