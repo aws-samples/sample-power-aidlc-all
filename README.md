@@ -18,9 +18,28 @@ No special prompt prefix needed — the agent asks you automatically.
 
 ## Installation
 
-1. Install this power in Kiro
-2. Ask the agent: *"Set up AI-DLC"*
-3. The agent runs the appropriate setup script for your platform and registers the hook
+### From GitHub (Recommended)
+
+1. Open Kiro IDE
+2. Open the Powers panel → click "Add power from GitHub"
+3. Enter the repository URL: `https://github.com/awslabs/aidlc-kiro-power/tree/main/aidlc_power`
+4. Click Install
+
+### From Local Path
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/awslabs/aidlc-kiro-power.git
+   ```
+2. Open Kiro IDE
+3. Open the Powers panel → click "Add power from Local Path"
+4. Select the `aidlc_power` directory (the one containing `POWER.md`)
+5. Click Install
+
+### After Installation
+
+1. Ask the agent: *"Set up AI-DLC"*
+2. The agent runs the appropriate setup script for your platform and registers the hook
 
 ## Platform Support
 
