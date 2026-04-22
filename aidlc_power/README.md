@@ -1,4 +1,4 @@
-# AI-DLC Setup Power for Kiro [Multi OS]
+# AI-DLC Setup Power for Kiro
 
 A [Kiro](https://kiro.dev) power that automates the installation of [AI-DLC](https://github.com/awslabs/aidlc-workflows) (AI-Driven Development Life Cycle) steering files into your workspace. AI-DLC is an adaptive software development workflow from AWS that guides you through inception, construction, and operations phases.
 
