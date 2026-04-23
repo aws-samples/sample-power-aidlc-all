@@ -1,0 +1,48 @@
+name: Generate Release Checksums
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+
+jobs:
+  checksums:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p artifacts
+          gh release download "${{ github.event.release.tag_name }}" \
+            --repo "${{ github.repository }}" \
+            --pattern "*.zip" \
+            --dir artifacts
+
+      - name: Generate SHA-256 checksums
+        run: |
+          cd artifacts
+          for f in *.zip; do
+            sha256sum "$f" > "${f}.sha256"
+            echo "Generated: ${f}.sha256"
+            cat "${f}.sha256"
+          done
+          # Combined checksums file
+          sha256sum *.zip > SHA256SUMS
+          echo ""
+          echo "SHA256SUMS:"
+          cat SHA256SUMS
+
+      - name: Upload checksum files to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd artifacts
+          for f in *.sha256 SHA256SUMS; do
+            gh release upload "${{ github.event.release.tag_name }}" "$f" \
+              --repo "${{ github.repository }}" \
+              --clobber
+            echo "Uploaded: $f"
+          done
