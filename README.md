@@ -86,7 +86,7 @@ Ask the agent to remove AI-DLC, or run the remove script manually:
 
 ```bash
 # macOS / Linux
-bash power-aidlc-setup/scripts/remove-aidlc.sh "<workspace-root>"
+bash bash aidlc_power/scripts/remove-aidlc.sh "<workspace-root>"
 ```
 
 ## Troubleshooting
