@@ -119,7 +119,7 @@ bash aidlc_power/scripts/remove-aidlc.sh "<workspace-root>"
 - All downloads use HTTPS with TLS certificate validation
 - Temp files are cleaned up automatically after installation
 - The agent hook prompt is hardcoded and not user-modifiable during setup
-- See `.threatmodel/` for the full STRIDE-based threat model
+
 
 ## License
 
