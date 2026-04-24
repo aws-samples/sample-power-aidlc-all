@@ -55,7 +55,22 @@ The hook is only meaningful when the AI-DLC steering files are present. If the p
 
 ## Post-Installation Usage
 
-After installation, the agent will proactively ask the user at the beginning of each new conversation whether they'd like to use the AI-DLC workflow for their task. No special prompt prefix is needed. When the user opts in, the AI-DLC workflow activates and guides them through:
+After installation, the agent will proactively ask the user at the beginning of each new conversation whether they'd like to use the AI-DLC workflow for their task. No special prompt prefix is needed. When the user opts in, they are presented with a clickable phase selector to choose where to start:
+
+1. **Requirements analysis and validation**
+2. **User story creation**
+3. **Application Design**
+4. **Creating units of work for parallel development**
+5. **Risk assessment and complexity evaluation**
+6. **Detailed component design**
+7. **Code generation and implementation**
+8. **Build configuration and testing strategies**
+9. **Quality assurance and validation**
+10. **Deployment automation and infrastructure**
+11. **Monitoring and observability setup**
+12. **Production readiness validation**
+
+The agent then follows the AI-DLC core workflow starting from the selected phase, guiding the user through:
 
 1. **Inception Phase** — Determines WHAT to build and WHY
 2. **Construction Phase** — Determines HOW to build it
