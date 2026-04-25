@@ -43,15 +43,37 @@ When the user asks to set up AI-DLC, read the `setup-workflow.md` steering file 
 
 ## Agent Behavior — Proactive AI-DLC Prompt
 
-During setup, the agent registers a Kiro agent hook (via `createHook`) that fires on every `promptSubmit` event. The hook instructs the agent to:
+During setup, the power installs an agent hook file into `.kiro/hooks/aidlc-workflow-prompt.kiro.hook`. The hook fires on every `promptSubmit` event and instructs the agent to:
 
 1. Check if AI-DLC steering files are installed in the workspace.
-2. If installed and the user hasn't been asked yet in this conversation, ask: *"I see AI-DLC is set up in this workspace. Would you like to use the AI-DLC workflow for this task?"*
-3. If the user says yes → activate the AI-DLC workflow as defined in `core-workflow.md`.
-4. If the user says no → proceed normally without AI-DLC.
+2. If installed and the user hasn't been asked yet in this conversation, present a clickable choice via the `userInput` tool asking whether to use AI-DLC.
+3. If the user selects "Yes, use AI-DLC" → present a second clickable phase selector to choose where to start, then activate the AI-DLC workflow from that phase.
+4. If the user selects "No thanks" → proceed normally without AI-DLC.
 5. Once answered, the agent remembers the choice for the rest of the conversation and does not ask again.
 
 The hook is only meaningful when the AI-DLC steering files are present. If the power is disabled or the steering files are removed, the hook's prompt check finds no files and the agent proceeds normally.
+
+## Canonical Hook Definition
+
+**This is the single source of truth for the AI-DLC agent hook.** Setup scripts MUST create `.kiro/hooks/aidlc-workflow-prompt.kiro.hook` with exactly this JSON content:
+
+```json
+{
+  "enabled": true,
+  "name": "AI-DLC Workflow Prompt",
+  "description": "Asks the user at the start of a conversation whether they want to use the AI-DLC workflow, then presents clickable phase selection options.",
+  "version": "1",
+  "when": {
+    "type": "promptSubmit"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Before proceeding with the user's request, check if AI-DLC steering files are installed in this workspace (look for .kiro/steering/aws-aidlc-rules/core-workflow.md).\n\nCRITICAL: You MUST STRICTLY use the userInput tool to present ALL options in this flow. Do NOT present options as plain text, markdown lists, or inline messages. Every question with choices MUST be a userInput tool call. This is non-negotiable.\n\nIf the steering files exist and you have NOT already asked the user about AI-DLC in this conversation, proceed with the steps below.\n\nSTEP A — Ask about AI-DLC:\n\nYou MUST call the userInput tool (not respond with text). Use these exact parameters:\n- reason: \"general-question\"\n- question: \"I see AI-DLC is set up in this workspace. Would you like to use the AI-DLC workflow for this task?\"\n- options: [\n    {\"title\": \"Yes, use AI-DLC\", \"description\": \"Activate the AI-DLC workflow and select a starting phase\", \"recommended\": true},\n    {\"title\": \"No thanks\", \"description\": \"Proceed normally without AI-DLC\"}\n  ]\n\nSTEP B — If user selected \"Yes, use AI-DLC\", you MUST immediately call the userInput tool again (not respond with text). Use these exact parameters:\n- reason: \"general-question\"\n- question: \"Which AI-DLC phase would you like to start from?\"\n- options: [\n    {\"title\": \"Requirements analysis and validation\", \"description\": \"Gather, analyze, and validate project requirements\"},\n    {\"title\": \"User story creation\", \"description\": \"Create user stories and acceptance criteria\"},\n    {\"title\": \"Application Design\", \"description\": \"Design the application architecture\"},\n    {\"title\": \"Creating units of work for parallel development\", \"description\": \"Break down work into parallelizable tasks\"},\n    {\"title\": \"Risk assessment and complexity evaluation\", \"description\": \"Identify risks and estimate complexity\"},\n    {\"title\": \"Detailed component design\", \"description\": \"Design individual components and interfaces\"},\n    {\"title\": \"Code generation and implementation\", \"description\": \"Generate and implement code\"},\n    {\"title\": \"Build configuration and testing strategies\", \"description\": \"Set up build pipelines and test frameworks\"},\n    {\"title\": \"Quality assurance and validation\", \"description\": \"Run tests and code reviews\"},\n    {\"title\": \"Deployment automation and infrastructure\", \"description\": \"Automate deployment and provision infrastructure\"},\n    {\"title\": \"Monitoring and observability setup\", \"description\": \"Set up logging, metrics, and dashboards\"},\n    {\"title\": \"Production readiness validation\", \"description\": \"Final checks before going live\"}\n  ]\n\nSTEP C — After user selects a phase via the userInput tool, follow the AI-DLC core-workflow.md steering file starting from that phase.\n\nIf user selected \"No thanks\" in STEP A, proceed normally without AI-DLC.\n\nIf you have already asked in this conversation, do NOT ask again — honor their earlier choice.\n\nREMINDER: All choices in this flow MUST be presented via the userInput tool. Never use plain text for option presentation."
+  }
+}
+```
+
+The setup scripts embed this exact JSON content and write it directly to the workspace — they do NOT read from any separate hook file. To modify the hook behavior, update the JSON embedded in the setup scripts (`setup-aidlc.sh`, `setup-aidlc.ps1`, `setup-aidlc.bat`) and keep this POWER.md in sync.
 
 ## Post-Installation Usage
 
