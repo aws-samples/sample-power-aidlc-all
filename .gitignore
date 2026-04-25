@@ -17,3 +17,6 @@ Thumbs.db
 .env.*
 .threatmodel
 .github/workflows
+
+# AI-DLC setup temp directories
+.aidlc-setup-tmp-*/

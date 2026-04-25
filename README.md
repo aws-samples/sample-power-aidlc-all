@@ -51,29 +51,27 @@ No special prompt prefix needed — the agent asks you automatically.
 
 ## How It Works
 
-After installation, every new conversation starts with the agent checking for AI-DLC steering files. If found, it presents a choice:
+After installation, every new conversation starts with the agent checking for AI-DLC steering files. If found, it asks:
 
 > *"I see AI-DLC is set up in this workspace. Would you like to use the AI-DLC workflow for this task?"*
 
-**If you choose "Yes, use AI-DLC":**
-You'll immediately see a second list to select your starting phase:
-- Requirements analysis and validation
-- User story creation
-- Application Design
-- Creating units of work for parallel development
-- Risk assessment and complexity evaluation
-- Detailed component design
-- Code generation and implementation
-- Build configuration and testing strategies
-- Quality assurance and validation
-- Deployment automation and infrastructure
-- Monitoring and observability setup
-- Production readiness validation
+- Say **yes** → you'll be asked to select a starting phase:
+  - Requirements analysis and validation
+  - User story creation
+  - Application Design
+  - Creating units of work for parallel development
+  - Risk assessment and complexity evaluation
+  - Detailed component design
+  - Code generation and implementation
+  - Build configuration and testing strategies
+  - Quality assurance and validation
+  - Deployment automation and infrastructure
+  - Monitoring and observability setup
+  - Production readiness validation
+  
+  The agent then follows the AI-DLC workflow starting from your chosen phase.
 
-The agent then follows the AI-DLC workflow starting from your chosen phase.
-
-**If you choose "No thanks":**
-The agent proceeds normally without AI-DLC.
+- Say **no** → the agent proceeds normally
 
 The agent only asks once per conversation and remembers your choice.
 
