@@ -24,11 +24,13 @@ If already installed, inform the user and ask if they want to update (re-run set
 
 ## Step 3: Run Setup
 
+**IMPORTANT**: Always pass the absolute power path as the second argument. This ensures the power's own steering files (enforcement rules) are copied correctly, regardless of how the script is invoked.
+
 Run the appropriate setup script:
 
-- macOS/Linux: `bash "<power-path>/scripts/setup-aidlc.sh" "<workspace-root>"`
-- Windows PowerShell: `powershell -ExecutionPolicy Bypass -File "<power-path>\scripts\setup-aidlc.ps1" -WorkspacePath "<workspace-root>"`
-- Windows CMD: `"<power-path>\scripts\setup-aidlc.bat" "<workspace-root>"`
+- macOS/Linux: `bash "<power-path>/scripts/setup-aidlc.sh" "<workspace-root>" "<power-path>"`
+- Windows PowerShell: `powershell -ExecutionPolicy Bypass -File "<power-path>\scripts\setup-aidlc.ps1" -WorkspacePath "<workspace-root>" -PowerPath "<power-path>"`
+- Windows CMD: `"<power-path>\scripts\setup-aidlc.bat" "<workspace-root>" "<power-path>"`
 
 The script will:
 1. Query the GitHub API for the latest AI-DLC release
@@ -36,9 +38,12 @@ The script will:
 3. Extract the contents
 4. Copy `aws-aidlc-rules/` → `.kiro/steering/aws-aidlc-rules/`
 5. Copy `aws-aidlc-rule-details/` → `.kiro/aws-aidlc-rule-details/`
-6. Write the canonical agent hook (embedded in the script, defined in POWER.md) → `.kiro/hooks/aidlc-workflow-prompt.kiro.hook`
-7. Clean up temp files
-8. Print the installed version
+6. Copy this power's `steering/aidlc-*.md` files → `.kiro/steering/` (enforcement rules)
+7. Write the canonical agent hook (embedded in the script, defined in POWER.md) → `.kiro/hooks/aidlc-workflow-prompt.kiro.hook`
+8. Clean up temp files
+9. Print the installed version
+
+If the script output shows "WARNING: Power steering directory not found" or "WARNING: No aidlc-*.md files found", the power path was not resolved correctly. Re-run with the explicit `<power-path>` argument.
 
 ## Step 4: Verify
 
@@ -46,6 +51,7 @@ After setup completes, confirm the key files exist:
 
 - `.kiro/steering/aws-aidlc-rules/core-workflow.md`
 - `.kiro/aws-aidlc-rule-details/` with subdirectories
+- `.kiro/steering/aidlc-userinput-enforcement.md` (always-included enforcement rules)
 - `.kiro/hooks/aidlc-workflow-prompt.kiro.hook`
 
 Tell the user to check the Kiro steering panel for `core-workflow` under Workspace.
