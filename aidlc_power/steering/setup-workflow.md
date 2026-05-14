@@ -62,11 +62,19 @@ The hook content is embedded directly in each setup script (`setup-aidlc.sh`, `.
 
 **To modify hook behavior:**
 1. Update the JSON in `POWER.md` (canonical source)
-2. Sync the embedded content in all three setup scripts
+2. Sync the embedded content in all three setup scripts (the `.bat` script uses a base64-encoded copy of the same JSON)
 3. Re-run setup in the user's workspace
 
-The hook fires on `promptSubmit` and uses the `userInput` tool to present clickable options to the user.
+The hook fires on `promptSubmit` and:
+1. Asks the user (via `userInput` in Spec mode or markdown in Vibe mode) whether to use AI-DLC.
+2. If yes, silently runs workspace detection per `.kiro/aws-aidlc-rule-details/inception/workspace-detection.md` to classify the project as **greenfield** or **brownfield**.
+3. Presents the phase list tailored to the detected type — greenfield shows 12 phases, brownfield shows 13 with **Reverse Engineering** on top.
 
 ## Step 6: Next Steps
 
-Let the user know that AI-DLC is now installed and the agent hook is active. Explain that the agent will automatically ask at the beginning of each new conversation whether they'd like to use the AI-DLC workflow. If they opt in, they'll be asked to select a starting phase. If they decline, the agent proceeds normally.
+Let the user know that AI-DLC is now installed and the agent hook is active. Explain that at the beginning of each new conversation the agent will:
+- Ask whether to use the AI-DLC workflow.
+- If yes, detect whether the workspace is greenfield or brownfield.
+- Present a phase selector appropriate to the detected type (brownfield includes **Reverse Engineering** as phase 1).
+
+If they decline, the agent proceeds normally.
