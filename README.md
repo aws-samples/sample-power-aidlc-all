@@ -6,7 +6,10 @@ A [Kiro](https://kiro.dev) power that automates the installation of [AI-DLC](htt
 
 1. Downloads the latest AI-DLC release from GitHub
 2. Installs steering files into your `.kiro/` directory
-3. Registers an agent hook that asks whether you want to use AI-DLC at the start of each conversation
+3. Registers an agent hook that, at the start of each conversation:
+   - Asks whether you want to use AI-DLC
+   - Runs **workspace detection** to classify the project as **greenfield** (no existing code) or **brownfield** (existing code found)
+   - Presents a phase selector tailored to the detected type — brownfield projects get **Reverse Engineering** as the first phase
 
 No special prompt prefix needed — the agent asks you automatically.
 
@@ -22,7 +25,7 @@ No special prompt prefix needed — the agent asks you automatically.
 
 1. Open Kiro IDE
 2. Open the Powers panel → click "Add Custom Power" → click "Add power from GitHub"
-3. Enter the repository URL: 
+3. Enter the repository URL:
    ```bash
    https://github.com/aws-samples/sample-power-aidlc-all/tree/main/aidlc_power
    ```
@@ -58,39 +61,64 @@ After installation, every new conversation starts with the agent checking for AI
 
 > *"I see AI-DLC is set up in this workspace. Would you like to use the AI-DLC workflow for this task?"*
 
-- Say **yes** → you'll be asked to select a starting phase:
-  - Requirements analysis and validation
-  - User story creation
-  - Application Design
-  - Creating units of work for parallel development
-  - Risk assessment and complexity evaluation
-  - Detailed component design
-  - Code generation and implementation
-  - Build configuration and testing strategies
-  - Quality assurance and validation
-  - Deployment automation and infrastructure
-  - Monitoring and observability setup
-  - Production readiness validation
-  
-  The agent then follows the AI-DLC workflow starting from your chosen phase.
+- Say **no** → the agent proceeds normally.
+- Say **yes** → the agent silently runs workspace detection (per `.kiro/aws-aidlc-rule-details/inception/workspace-detection.md`), classifies the project, and presents the appropriate phase list.
 
-- Say **no** → the agent proceeds normally
+The agent asks once per conversation and remembers your choice.
 
-The agent only asks once per conversation and remembers your choice.
+### Greenfield phases (12)
 
-The agent only asks once per conversation.
+For empty workspaces with no source or build files:
+
+1. Requirements analysis and validation
+2. User story creation
+3. Application Design
+4. Creating units of work for parallel development
+5. Risk assessment and complexity evaluation
+6. Detailed component design
+7. Code generation and implementation
+8. Build configuration and testing strategies
+9. Quality assurance and validation
+10. Deployment automation and infrastructure
+11. Monitoring and observability setup
+12. Production readiness validation
+
+### Brownfield phases (13)
+
+For workspaces with existing code, **Reverse Engineering** is added at the top:
+
+1. **Reverse Engineering** — Analyze existing codebase to reconstruct requirements, architecture, and design artifacts
+2. Requirements analysis and validation
+3. User story creation
+4. Application Design
+5. Creating units of work for parallel development
+6. Risk assessment and complexity evaluation
+7. Detailed component design
+8. Code generation and implementation
+9. Build configuration and testing strategies
+10. Quality assurance and validation
+11. Deployment automation and infrastructure
+12. Monitoring and observability setup
+13. Production readiness validation
+
+The agent then follows the AI-DLC workflow starting from your chosen phase. For Reverse Engineering, it also consults `.kiro/aws-aidlc-rule-details/inception/reverse-engineering.md` if available.
 
 ## Installed Directory Structure
 
 ```
 <project-root>/
 └── .kiro/
+    ├── hooks/
+    │   └── aidlc-workflow-prompt.kiro.hook
     ├── steering/
-    │   └── aws-aidlc-rules/
-    │       └── core-workflow.md
+    │   ├── aws-aidlc-rules/
+    │   │   └── core-workflow.md
+    │   └── aidlc-userinput-enforcement.md
     └── aws-aidlc-rule-details/
         ├── common/
         ├── inception/
+        │   ├── workspace-detection.md
+        │   └── reverse-engineering.md
         ├── construction/
         ├── extensions/
         └── operations/
@@ -114,13 +142,13 @@ bash aidlc_power/scripts/remove-aidlc.sh "<workspace-root>"
 - **Network errors** — Check connectivity to `api.github.com`. If behind a proxy, set `HTTPS_PROXY`.
 - **Steering files not visible** — Restart Kiro or open a new chat session.
 - **Windows script execution disabled** — Run `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned` or use the `.bat` script.
+- **Wrong project type detected** — If the workspace has a single non-source artifact (like a stray `README.md`) and you'd expected greenfield, that's still classified as greenfield. If detection seems off, you can simply pick a different phase from the list manually.
 
 ## Security
 
 - All downloads use HTTPS with TLS certificate validation
 - Temp files are cleaned up automatically after installation
 - The agent hook prompt is hardcoded and not user-modifiable during setup
-
 
 ## License
 
