@@ -2,6 +2,8 @@
 
 A [Kiro](https://kiro.dev) power that automates the installation of [AI-DLC](https://github.com/awslabs/aidlc-workflows) (AI-Driven Development Life Cycle) steering files into your workspace. AI-DLC is an adaptive software development workflow from AWS that guides you through inception, construction, and operations phases.
 
+This power enables you to use AI-DLC in **any Kiro mode** — both **Vibe** (conversational) and **Spec** (structured requirements → design → tasks). In Spec mode, the agent presents clickable options via the `userInput` tool; in Vibe mode, it falls back to numbered markdown lists. The workflow is identical either way.
+
 ## What It Does
 
 1. Downloads the latest AI-DLC release from GitHub
