@@ -10,6 +10,7 @@ A [Kiro](https://kiro.dev) power that automates the installation of [AI-DLC](htt
    - Asks whether you want to use AI-DLC
    - Runs **workspace detection** to classify the project as **greenfield** (no existing code) or **brownfield** (existing code found)
    - Presents a phase selector tailored to the detected type — brownfield projects get **Reverse Engineering** as the first phase
+   - Silently scans the entire workspace (`aidlc-docs/`, root docs, `docs/`, ADRs, API specs, `.kiro/specs/`, build/IaC configs, source, tests, runbooks) for earlier-phase artifacts and uses them as context for the chosen phase
 
 No special prompt prefix needed — the agent asks you automatically.
 
@@ -102,6 +103,23 @@ For workspaces with existing code, **Reverse Engineering** is added at the top:
 13. Production readiness validation
 
 The agent then follows the AI-DLC workflow starting from your chosen phase. For Reverse Engineering, it also consults `.kiro/aws-aidlc-rule-details/inception/reverse-engineering.md` if available.
+
+### Context gathering
+
+Before running the chosen phase, the agent silently scans the **entire workspace** for artifacts that could inform earlier phases. The scan covers far more than just `aidlc-docs/`:
+
+- **AI-DLC canonical** — `aidlc-docs/`
+- **Root-level docs** — `README.md`, `ARCHITECTURE.md`, `DESIGN.md`, `REQUIREMENTS.md`, `ROADMAP.md`, RFCs, PRDs, `SECURITY.md`
+- **Generic doc directories** — `docs/`, `documentation/`, `specs/`, `design/`, `architecture/`, `user-stories/`
+- **Architecture decision records** — `docs/adr/`, `architecture/decisions/`, `adr/`
+- **API and interface specs** — OpenAPI/Swagger, GraphQL schemas, Protobuf, Thrift, Avro
+- **Kiro specs** — `.kiro/specs/`
+- **Threat models and security** — `.threatmodel/`, `security/`
+- **Build/test/CI** — package manifests, Dockerfile, `.github/workflows/`, Jenkinsfile, etc.
+- **Infrastructure-as-code** — `terraform/`, `cdk/`, `k8s/`, `helm/`, `deploy/`
+- **Source, tests, monitoring, runbooks** — for brownfield context and later phases
+
+Common cache/vendor directories (`node_modules/`, `vendor/`, `.git/`, build outputs) are excluded. The agent briefly summarizes what it found and runs the selected phase informed by that context. If no prior artifacts exist, it simply starts from scratch. Nothing is asked.
 
 ## Installed Directory Structure
 
