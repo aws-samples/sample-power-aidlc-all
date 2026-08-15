@@ -56,33 +56,33 @@ Use the detected project type to determine the options. Brownfield adds **Revers
 Call `userInput` with:
 - `reason`: `"general-question"`
 - `question`: `"Detected <greenfield|brownfield> project. Which AI-DLC phase would you like to start from?"` (substitute the detected type)
-- `options` for **Greenfield** (12 phases, first is recommended):
-  1. Requirements analysis and validation
-  2. User story creation
-  3. Application Design
-  4. Creating units of work for parallel development
-  5. Risk assessment and complexity evaluation
-  6. Detailed component design
-  7. Code generation and implementation
-  8. Build configuration and testing strategies
-  9. Quality assurance and validation
-  10. Deployment automation and infrastructure
-  11. Monitoring and observability setup
-  12. Production readiness validation
-- `options` for **Brownfield** (13 phases, Reverse Engineering recommended):
-  1. Reverse Engineering — Analyze existing codebase to reconstruct requirements, architecture, and design artifacts
-  2. Requirements analysis and validation
-  3. User story creation
-  4. Application Design
-  5. Creating units of work for parallel development
-  6. Risk assessment and complexity evaluation
-  7. Detailed component design
-  8. Code generation and implementation
-  9. Build configuration and testing strategies
-  10. Quality assurance and validation
-  11. Deployment automation and infrastructure
-  12. Monitoring and observability setup
-  13. Production readiness validation
+- `options` for **Greenfield** (12 phases, first is recommended). Each option `title` is prefixed with its number:
+  1. `"1. Requirements analysis and validation"`
+  2. `"2. User story creation"`
+  3. `"3. Application Design"`
+  4. `"4. Creating units of work for parallel development"`
+  5. `"5. Risk assessment and complexity evaluation"`
+  6. `"6. Detailed component design"`
+  7. `"7. Code generation and implementation"`
+  8. `"8. Build configuration and testing strategies"`
+  9. `"9. Quality assurance and validation"`
+  10. `"10. Deployment automation and infrastructure"`
+  11. `"11. Monitoring and observability setup"`
+  12. `"12. Production readiness validation"`
+- `options` for **Brownfield** (13 phases, Reverse Engineering recommended). Each option `title` is prefixed with its number:
+  1. `"1. Reverse Engineering"` — Analyze existing codebase to reconstruct requirements, architecture, and design artifacts
+  2. `"2. Requirements analysis and validation"`
+  3. `"3. User story creation"`
+  4. `"4. Application Design"`
+  5. `"5. Creating units of work for parallel development"`
+  6. `"6. Risk assessment and complexity evaluation"`
+  7. `"7. Detailed component design"`
+  8. `"8. Code generation and implementation"`
+  9. `"9. Build configuration and testing strategies"`
+  10. `"10. Quality assurance and validation"`
+  11. `"11. Deployment automation and infrastructure"`
+  12. `"12. Monitoring and observability setup"`
+  13. `"13. Production readiness validation"`
 
 ### Without userInput (fallback)
 
